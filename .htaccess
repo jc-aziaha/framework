@@ -1,0 +1,11 @@
+#----------------------------------------------------------------------------
+#               Voici le fichier de configuration de Apache
+#----------------------------------------------------------------------------
+
+
+# Activation du code de modification du serveur Apache
+RewriteEngine On
+
+# Mise en place d'une règle qui demande à rediriger l'utilisateur vers le dossier public
+# si le dossier racine de l'application est chargé dans le navigateur
+RewriteRule ^(.*)$ public/

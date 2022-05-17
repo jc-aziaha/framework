@@ -1,0 +1,27 @@
+        Créer un cadre de travail (Framework) en implémentant l'architecture MVC
+
+- Créer le routeur
+
+- Les .htaccess et le dossier public
+- php -S localhost:8000 -d display_errors=1 -t public
+- composer init (Pour initialiser composer dans l'application)
+- composer require php-di/php-di (Pour installer le paquet du conteneur de services)
+
+- Création du conteneur de services (Suivre les indications de la documentation de php-di)
+        ** https://php-di.org/doc/getting-started.html
+- Chargement du conteneur de services par le FrontController
+- Création d'une nouvelle instance du noyau (Kernel) par le FrontController qui prend 2 paramètres : 
+        ** Le chemin racine de l'application ($basePath)
+        ** Le conteneur de services ($container)
+
+
+- Création du contrat HttpKernelInterface que devra implémenter le Kernel 
+        ** On y trouver la méthode handle que le kernel devra implémenter pour traiter la requête et 
+           retourner la réponse correspondante
+
+- Télécharger et installer le paquet "HttpFoundation" afin d'obtenir les objets Request et Response
+  compatibles avec la PSR-7.
+
+- Générer l'objet de type Request en tant que service dans "config/services.php"
+
+- Le FontController demande ensuite au noyau de traiter la requête et de lui retourner la réponse correspondante
