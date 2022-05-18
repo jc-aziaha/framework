@@ -1,6 +1,7 @@
 <?php
 namespace App;
 
+use App\Zion\Routing\Router;
 use Psr\Container\ContainerInterface;
 use App\Zion\Contract\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,11 +42,21 @@ use Symfony\Component\HttpFoundation\Response;
         private ContainerInterface $container;
 
 
+        /**
+         * Cette propriété représente le routeur
+         *
+         * @var Router
+         */
+        private Router $router;
+
+
 
         public function __construct(string $base_path, ContainerInterface $container)
         {
             $this->basePath  = $base_path;
             $this->container = $container;
+            $this->router    = $this->container->get(Router::class);
+
         }
 
 
@@ -60,6 +71,9 @@ use Symfony\Component\HttpFoundation\Response;
          */
         public function handle(Request $request) : Response
         {
-            // Pause 
+
+            $controllers = $this->container->get('controllers');
+
+            $this->router->collectControllers($controllers);
         }
     }
