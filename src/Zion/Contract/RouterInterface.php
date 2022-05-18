@@ -11,13 +11,15 @@ namespace App\Zion\Contract;
          * Elle transmet cette liste à la méthode "addRoutes"
          *
          * @param array $controllers
+         * 
          * @return void
          */
         public function collectControllers(array $controllers) : void;
 
 
         /**
-         * Cette méthode stocke les routes dont l'application attend la réception dans une armoire à routes ($routes).
+         * Cette méthode stocke les routes de l'application dans une armoire à routes ($routes)
+         * en prenant soin de les trier par nom. 
          *
          * @param array $controllers
          * 

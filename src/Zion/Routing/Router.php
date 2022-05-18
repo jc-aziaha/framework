@@ -1,10 +1,31 @@
 <?php
 namespace App\Zion\Routing;
 
+use App\Kernel;
+use App\Zion\Attribute\Route;
 use App\Zion\Contract\RouterInterface;
+use Symfony\Component\HttpFoundation\Request;
 
     class Router implements RouterInterface
     {
+
+
+        /**
+         * Cette propriété représente l'armoire à routes
+         *
+         * @var array
+         */
+        private array $routes = [];
+
+
+        /**
+         * Cette propriété représente les paramètres de la route qui a matché
+         */
+        private array $parameters = [];
+
+
+
+
         /**
          * Cette méthode permet de récupérer la liste de tous les contrôleurs de l'application 
          * qui lui est fournie par le noyau (kernel).
@@ -22,7 +43,8 @@ use App\Zion\Contract\RouterInterface;
 
 
         /**
-         * Cette méthode stocke les routes dont l'application attend la réception dans une armoire à routes ($routes).
+         * Cette méthode stocke les routes de l'application dans une armoire à routes ($routes)
+         * en prenant soin de les trier par nom.
          *
          * @param array $controllers
          * 
@@ -38,9 +60,18 @@ use App\Zion\Contract\RouterInterface;
 
                 foreach ($reflectionMethods as $reflectionMethod) 
                 {
-                    $reflectionAttributes = $reflectionMethod->getAttributes();
+                    $reflectionAttributes = $reflectionMethod->getAttributes(Route::class);
 
-                    dd($reflectionAttributes);
+                    foreach ($reflectionAttributes as $reflectionAttribute) 
+                    {
+                        $route = $reflectionAttribute->newInstance();
+
+                        $this->routes[$route->getName()] = [
+                            "class"  => $reflectionMethod->class,
+                            "method" => $reflectionMethod->name,
+                            "route"  => $route
+                        ];
+                    }
                 }
             }
         }
@@ -58,6 +89,45 @@ use App\Zion\Contract\RouterInterface;
          */
         public function resolve() : ?array
         {
+            // Récupérer l'uri de l'url
+            $request = Kernel::getKernel()->getContainer()->get(Request::class);
+            $uri_url = $request->server->get('REQUEST_URI');
             
+            foreach ($this->routes as $route) 
+            {
+                $uri_route = $route['route']->getPath();
+
+                if($this->matches($uri_url, $uri_route))
+                {
+                    if ( isset($this->parameters) && !empty($this->parameters) ) 
+                    {
+                        return [
+                            "route" => $route,
+                            "parameters" => $this->parameters
+                        ];
+                    }
+
+                    return [
+                        "route" => $route
+                    ];
+                }
+            }
+
+            return null;
+        }
+
+        private function matches($uri_url, $uri_route)
+        {
+            $pattern = preg_replace("#{[a-z]+}#", "([a-zA-Z0-9-_]+)", $uri_route);
+            $pattern = "#^$pattern$#";
+
+            if ( preg_match($pattern, $uri_url, $matches) ) 
+            {
+                array_shift($matches);
+                $this->parameters = $matches;
+                return true;
+            }
+
+            return false;
         }
     }

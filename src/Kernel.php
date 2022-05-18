@@ -1,8 +1,10 @@
 <?php
 namespace App;
 
+use App\Kernel;
 use App\Zion\Routing\Router;
 use Psr\Container\ContainerInterface;
+use App\Controller\Error\ErrorController;
 use App\Zion\Contract\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,9 +52,18 @@ use Symfony\Component\HttpFoundation\Response;
         private Router $router;
 
 
+        /**
+         * Cette propriété représente le noyau dans lui-même
+         *
+         * @var Kernel
+         */
+        private static Kernel $kernel;
+
+
 
         public function __construct(string $base_path, ContainerInterface $container)
         {
+            self::$kernel    = $this;
             $this->basePath  = $base_path;
             $this->container = $container;
             $this->router    = $this->container->get(Router::class);
@@ -75,5 +86,31 @@ use Symfony\Component\HttpFoundation\Response;
             $controllers = $this->container->get('controllers');
 
             $this->router->collectControllers($controllers);
+
+            $router_response = $this->router->resolve();
+
+            $controller_response = $this->getControllerResponse($router_response);
+            return $controller_response;
         }
+
+        private function getControllerResponse($router_response)
+        {
+            if ( !is_array($router_response) && (null == $router_response) ) 
+            {
+                return $this->container->call([ErrorController::class, "notFound"]);
+            }
+        }
+
+
+        public static function getKernel()
+        {
+            return self::$kernel;
+        }
+
+        public function getContainer()
+        {
+            return $this->container;
+        }
+
+
     }

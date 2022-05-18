@@ -36,7 +36,11 @@ use Symfony\Component\HttpFoundation\Request;
 
     // Le FontController demande au noyau de traiter la requête
     // et de lui retourner la réponse correspondante
-    $app->handle($container->get(Request::class));
+    $response = $app->handle($container->get(Request::class));
+
+
+    // Le FrontController envoie la réponse au navigateur
+    $response->send();
 
 
 
