@@ -1,6 +1,8 @@
 <?php
 
+use Twig\Environment;
 use App\Zion\Routing\Router;
+use Twig\Loader\FilesystemLoader;
 use App\Controller\WelcomeController;
 use App\Controller\Error\ErrorController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,5 +17,10 @@ use Symfony\Component\HttpFoundation\Request;
             "WelcomeController" => WelcomeController::class,
             "ErrorController"   => ErrorController::class,
         ],
+
+        Environment::class => function () {
+            $loader = new FilesystemLoader(__DIR__ . "/../templates");
+            return new Environment($loader);
+        }
 
     ];

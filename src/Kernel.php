@@ -99,6 +99,19 @@ use Symfony\Component\HttpFoundation\Response;
             {
                 return $this->container->call([ErrorController::class, "notFound"]);
             }
+
+            $controller = $router_response['route']['class'];
+            $method     = $router_response['route']['method'];
+
+            // dd($router_response);
+
+            if ( isset($router_response['parameters']) && !empty($router_response['parameters']) ) 
+            {
+                $parameters = $router_response['parameters'];
+                return $this->container->call([$controller, $method], [$parameters]);
+            }
+
+            return $this->container->call([$controller, $method]);
         }
 
 
