@@ -14,7 +14,11 @@
     "require": {
         "php-di/php-di": "^6.4",
         "symfony/http-foundation": "^6.0",
-        "twig/twig": "^3.4"
+        "twig/twig": "^3.4",
+        "doctrine/orm": "^2.12",
+        "doctrine/migrations": "^3.5",
+        "vlucas/phpdotenv": "^5.4",
+        "symfony/cache": "^6.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.0"

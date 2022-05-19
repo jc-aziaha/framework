@@ -1,0 +1,2 @@
+Pour afficher les dossiers et fichiers cachés sur mac
+    Commande, Maj et point

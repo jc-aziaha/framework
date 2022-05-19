@@ -1,33 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
-    <body>
-        <h1>Welcome {{ name }}</h1>
+{% extends "base.html.twig" %}
 
-        <h2>Voici la liste des jours de la semaine : </h2>
+{% block title %}
+    Framework Poo
+{% endblock %}
 
-        {% for day in days %}
-            
-        {% endfor %}
+{% block body %}
+    <h1>Welcome</h1>
 
-        @foreach()
-        
-        @endforeach
-
-
-        <?php foreach($days as $day) ?>
-
-        <?php endforeach ?>
-
-        <?php for($i=0; $i<count($days); $i++) ?>
-
-        <?php endfor ?>
-
-
-    </body>
-</html>
+    <a href="" class="btn btn-primary">Ajouter une nouvelle personne</a>
+{% endblock %}

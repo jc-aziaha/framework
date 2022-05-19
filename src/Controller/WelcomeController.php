@@ -13,12 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
         #[Route('/', name: 'index', methods: ['GET'])]
         public function index() : Response
         {
-            $name = "JC";
-            $days = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
-            return $this->render("index.html.twig", [
-                "name" => $name, 
-                "days" => $days
-            ]);
+            return $this->render("index.html.twig");
         }
 
 
